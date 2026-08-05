@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cameron Jude Luyt | Software Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#070a12;
+  --panel:#0e1526;
+  --panel-2:#131c31;
+  --line:#202c47;
+  --text:#eef2fb;
+  --muted:#8b98b6;
+  --signal:#3fe8ab;   /* status / "live" accent — used only for availability + active markers */
+  --pulse:#5c8bff;    /* structural accent — links, dividers, focal highlights */
+  --shadow:0 30px 80px rgba(0,0,0,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important}
+}
+body{
+  font-family:'Inter',sans-serif;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(92,139,255,.09), transparent 45%),
+    radial-gradient(circle at 100% 100%, rgba(63,232,171,.06), transparent 40%),
+    var(--ink);
+  color:var(--text);
+  padding:56px 24px;
+  min-height:100vh;
+}
+/* faint schematic grid — nods to the infrastructure/ops-platform work without shouting it */
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(92,139,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(92,139,255,.035) 1px, transparent 1px);
+  background-size:42px 42px;
+  pointer-events:none;
+  z-index:0;
+}
+.cv{
+  position:relative;
+  max-width:1220px;
+  margin:auto;
+  background:rgba(14,21,38,.9);
+  backdrop-filter:blur(18px);
+  border:1px solid var(--line);
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  animation:rise .6s ease-out both;
+}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ---------- HERO / STATUS BAR ---------- */
+.hero{
+  padding:40px 48px 34px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:32px;
+  flex-wrap:wrap;
+}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:14px;
+}
+h1{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;
+  font-size:46px;
+  line-height:1.04;
+  letter-spacing:-.5px;
+}
+.status{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  letter-spacing:.5px;
+  color:var(--signal);
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:9px 16px 9px 12px;
+  border:1px solid rgba(63,232,171,.35);
+  background:rgba(63,232,171,.07);
+  border-radius:999px;
+  white-space:nowrap;
+  text-decoration:none;
+}
+.status .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--signal);
+  box-shadow:0 0 0 0 rgba(63,232,171,.6);
+  animation:pulse 2.2s infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(63,232,171,.55)}
+  70%{box-shadow:0 0 0 9px rgba(63,232,171,0)}
+  100%{box-shadow:0 0 0 0 rgba(63,232,171,0)}
+}
+.status{cursor:pointer;transition:background .2s,border-color .2s,transform .2s;}
+.status:hover{background:rgba(63,232,171,.14);border-color:var(--signal);transform:translateY(-1px);}
+
+/* ---------- HERO LEFT / AVATAR ---------- */
+.hero-left{display:flex;align-items:center;gap:26px;}
+.avatar-ring{
+  width:104px;height:104px;border-radius:50%;
+  padding:3px;flex-shrink:0;
+  background:conic-gradient(from 0deg, var(--pulse), var(--signal), rgba(92,139,255,.15), var(--pulse));
+  animation:spin 9s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.avatar{
+  width:100%;height:100%;border-radius:50%;
+  background:var(--panel-2);
+  border:1px dashed var(--line);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+.avatar svg{width:40px;height:40px;stroke:var(--muted);opacity:.55;}
+.avatar-overlay{
+  position:absolute;inset:0;
+  background:rgba(7,10,18,.8);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:9.5px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--text);
+  opacity:0;
+  transition:opacity .25s ease;
+  text-align:center;
+}
+.avatar:hover .avatar-overlay{opacity:1;}
+.avatar:hover svg{opacity:.15;}
+
+.role{
+  font-family:'JetBrains Mono',monospace;
+  color:var(--pulse);
+  font-size:15px;
+  margin-top:10px;
+  font-weight:500;
+}
+.role::after{
+  content:"";
+  display:inline-block;
+  width:8px;height:15px;
+  margin-left:5px;
+  background:var(--pulse);
+  vertical-align:-2px;
+  animation:blink 1.1s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0}}
+
+/* ---------- METRIC STRIP ---------- */
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-bottom:1px solid var(--line);
+}
+.metric{
+  padding:24px 28px;
+  border-right:1px solid var(--line);
+  transition:background .25s ease, transform .25s ease;
+}
+.metric:last-child{border-right:none}
+.metric:hover{background:rgba(92,139,255,.06);transform:translateY(-2px);}
+.metric:hover .num{color:var(--pulse);}
+.metric .num{transition:color .25s ease;}
+.metric .num{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:30px;
+  font-weight:700;
+  color:var(--text);
+}
+.metric .label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+/* ---------- BODY GRID ---------- */
+.body-grid{
+  display:grid;
+  grid-template-columns:300px 1fr;
+}
+aside{
+  padding:36px 32px;
+  border-right:1px solid var(--line);
+  background:rgba(9,13,24,.4);
+}
+main{padding:36px 44px 44px;}
+
+.section{margin-bottom:34px;}
+.section:last-child{margin-bottom:0;}
+.section h3{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  color:var(--pulse);
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.section h3::before{content:"›";color:var(--signal);font-weight:700;}
+
+.info{display:flex;flex-direction:column;gap:11px;font-size:13.5px;color:var(--muted);}
+.info a{color:var(--muted);text-decoration:none;}
+.info a:hover{color:var(--text);}
+
+.skill-group{margin-bottom:16px;}
+.skill-group:last-child{margin-bottom:0;}
+.skill-group .g-label{
+  font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:500;
+}
+.skill{display:flex;flex-wrap:wrap;gap:7px;}
+.skill span{
+  padding:6px 11px;
+  border-radius:7px;
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  font-size:12px;
+  color:#d5deef;
+  transition:background .2s ease, border-color .2s ease, transform .2s ease, color .2s ease;
+  cursor:default;
+}
+.skill span:hover{
+  background:rgba(92,139,255,.14);
+  border-color:var(--pulse);
+  color:var(--text);
+  transform:translateY(-2px);
+}
+
+.strengths{display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:#cdd8ee;}
+.strengths div{display:flex;align-items:center;gap:9px;}
+.strengths div::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--signal);flex-shrink:0;}
+
+/* ---------- EXPERIENCE LOG ---------- */
+.summary{
+  font-size:14.5px;
+  line-height:1.75;
+  color:var(--muted);
+  max-width:640px;
+  margin-bottom:38px;
+}
+.log{
+  position:relative;
+  padding-left:26px;
+  border-left:1px solid var(--line);
+}
+.entry{
+  position:relative;
+  padding-bottom:36px;
+  animation:rise .5s ease-out both;
+}
+.entry:nth-child(2){animation-delay:.08s}
+.entry:last-child{padding-bottom:0;}
+.entry::before{
+  content:"";
+  position:absolute;left:-31px;top:4px;
+  width:11px;height:11px;border-radius:50%;
+  background:var(--ink);
+  border:2px solid var(--muted);
+}
+.entry.active::before{
+  border-color:var(--signal);
+  background:var(--signal);
+  box-shadow:0 0 0 4px rgba(63,232,171,.15);
+}
+.entry{transition:transform .25s ease;}
+.entry:hover{transform:translateX(4px);}
+.entry h2{transition:color .2s ease;}
+.entry:hover h2{color:var(--pulse);}
+.entry:hover::before{box-shadow:0 0 0 6px rgba(92,139,255,.18);}
+.entry .tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:1px;
+  color:var(--signal);
+  margin-bottom:8px;
+  display:block;
+}
+.entry.past .tag{color:var(--muted);}
+.entry h2{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:21px;
+  font-weight:600;
+  margin-bottom:3px;
+}
+.company{color:#a9b6d6;font-weight:500;margin-bottom:3px;font-size:14px;}
+.date{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  color:var(--muted);
+  margin-bottom:15px;
+}
+ul.duties{list-style:none;display:flex;flex-direction:column;gap:9px;}
+ul.duties li{
+  font-size:13.8px;
+  line-height:1.6;
+  color:#d3ddf0;
+  padding-left:16px;
+  position:relative;
+}
+ul.duties li::before{
+  content:"—";
+  position:absolute;left:0;top:0;
+  color:var(--line);
+}
+
+/* ---------- LOWER GRID ---------- */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:24px;
+  margin-top:40px;
+}
+.card{
+  background:var(--panel-2);
+  padding:22px 24px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.card:hover{
+  transform:translateY(-4px);
+  border-color:var(--pulse);
+  box-shadow:0 20px 46px rgba(0,0,0,.4);
+}
+
+/* ---------- SCROLL REVEAL ---------- */
+.reveal{
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity .55s ease, transform .55s ease;
+}
+.reveal.in-view{opacity:1;transform:translateY(0);}
+.card h3{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--pulse);
+  margin-bottom:14px;
+}
+.card ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.card ul li{
+  font-size:13px;
+  color:#ccd6ea;
+  padding-left:14px;
+  position:relative;
+}
+.card ul li::before{content:"·";position:absolute;left:0;color:var(--signal);font-weight:700;}
+.cert-group{margin-bottom:16px;}
+.cert-group:last-child{margin-bottom:0;}
+.cert-group .g-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+
+.footer{
+  margin-top:36px;
+  padding-top:22px;
+  border-top:1px solid var(--line);
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+@media(max-width:920px){
+  body{padding:20px 14px}
+  .hero{padding:30px 26px 26px}
+  h1{font-size:34px}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .metric:nth-child(2){border-right:none}
+  .body-grid{grid-template-columns:1fr}
+  aside{border-right:none;border-bottom:1px solid var(--line)}
+  main{padding:30px 26px 36px}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="cv">
+
+  <div class="hero">
+    <div class="hero-left">
+      <div class="avatar-ring">
+        <div class="avatar">
+          <!-- Placeholder — swap this <div class="avatar"> block for <img src="your-photo.jpg" alt="Cameron Luyt"> when ready -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.1 3.4-7 7.5-7s7.5 2.9 7.5 7"/></svg>
+          <div class="avatar-overlay"><img src="me.jpg" style="width: 100%;" /></div>
+        </div>
+      </div>
+      <div>
+        <div class="eyebrow">Software Developer · Cape Town, South Africa</div>
+        <h1>Cameron Jude&nbsp;Luyt</h1>
+        <div class="role">Full-Stack .NET Developer — Enterprise Systems &amp; Automation</div>
+      </div>
+    </div>
+    <a class="status" href="mailto:cameronluyt30@gmail.com?subject=Let%27s%20talk"><span class="dot"></span>AVAILABLE FOR SOFTWARE ENGINEERING ROLES</a>
+  </div>
+
+  <div class="metrics">
+    <div class="metric"><div class="num">4+</div><div class="label">Years Experience</div></div>
+    <div class="metric"><div class="num">10</div><div class="label">Platforms Shipped</div></div>
+    <div class="metric"><div class="num">19</div><div class="label">Core Technologies</div></div>
+    <div class="metric"><div class="num">18</div><div class="label">Certifications</div></div>
+  </div>
+
+  <div class="body-grid">
+
+    <aside>
+      <div class="section">
+        <h3>Contact</h3>
+        <div class="info">
+          <div>📍 Cape Town, South Africa</div>
+          <div>📱 081 019 0744</div>
+          <div>✉ <a href="mailto:cameronluyt30@gmail.com">cameronluyt30@gmail.com</a></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Stack</h3>
+        <div class="skill-group">
+          <div class="g-label">Backend &amp; Data</div>
+          <div class="skill">
+            <span>.NET</span><span>ASP.NET Core</span><span>Web API</span><span>MVC</span>
+            <span>C#</span><span>SQL Server</span><span>MySQL</span><span>Entity Framework</span><span>Dapper</span><span>Microservices</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="g-label">Frontend</div>
+          <div class="skill">
+            <span>Angular</span><span>JavaScript</span><span>HTML</span><span>CSS</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="g-label">Tooling &amp; Integration</div>
+          <div class="skill">
+            <span>Git</span><span>Gitea</span><span>QuestPDF</span><span>n8n</span><span>Microsoft Graph</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Strengths</h3>
+        <div class="strengths">
+          <div>Business Process Automation</div>
+          <div>Enterprise Application Development</div>
+          <div>Systems Integration</div>
+          <div>Infrastructure Development</div>
+          <div>Performance Optimization</div>
+          <div>Security Platforms</div>
+          <div>UI / UX Design</div>
+          <div>Problem Solving</div>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+      <p class="summary">
+        Software developer at Securicom, working at the intersection of automation, security and systems
+        integration — designing and building internal tools, APIs and reporting engines with .NET Core, C#, Dapper
+        and SQL. 4+ years turning manual, ticket-driven processes into maintainable, efficient backend services that
+        support security teams and streamline operational workflows. Clarity, speed, autonomy, impact.
+      </p>
+
+      <div class="log">
+
+        <div class="entry active">
+          <span class="tag">● ACTIVE</span>
+          <h2>Software Developer</h2>
+          <div class="company">Securicom IT Solutions</div>
+          <div class="date">February 2022 — Present</div>
+          <ul class="duties">
+            <li>Develop enterprise web applications using ASP.NET Core, .NET Framework, MVC, C#, JavaScript and SQL Server.</li>
+            <li>Designed automation platforms using .NET Worker Services for SLA reporting, customer synchronization, infrastructure monitoring, ticket workflows and Microsoft 365 integrations.</li>
+            <li>Built REST API integrations with Microsoft Graph, FortiCloud, ePurifier and EtchMail.</li>
+            <li>Developed and optimized SQL Server &amp; MySQL databases, Infrastructure DAL libraries and reusable backend services.</li>
+            <li>Customized and automated Perfex CRM and CUSP CRM, including WhatsApp self-service ticket management and mail sender allow/block functionality.</li>
+            <li>Designed and developed enterprise platforms including SocPuppet Security Operations Platform, MailSecurity Portal and MyAdmin Portal.</li>
+            <li>Led UI/UX modernization projects, including two complete MailSecurity Portal redesigns, MyAdmin Portal restyling and enterprise email signature branding.</li>
+            <li>Implemented internal DevOps tooling including locally hosted Gitea repositories and n8n workflow automation.</li>
+          </ul>
+        </div>
+
+        <div class="entry past">
+          <span class="tag">○ ARCHIVED</span>
+          <h2>Software Development Intern</h2>
+          <div class="company">DigiOutsource Services</div>
+          <div class="date">September 2020 — February 2021</div>
+          <ul class="duties">
+            <li>Full-stack web development using Angular, ASP.NET, Node.js, MongoDB, JavaScript and TypeScript.</li>
+            <li>Worked within Agile teams using GitLab source control.</li>
+            <li>Developed internal web applications and user interfaces.</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="grid">
+        <div class="card reveal">
+          <h3>Enterprise Projects</h3>
+          <ul>
+            <li>Security Operations Platform (SocPuppet)</li>
+            <li>MailSecurity Portal</li>
+            <li>MyAdmin Portal</li>
+            <li>Perfex CRM Automations</li>
+            <li>CUSP CRM Worker Services</li>
+            <li>WhatsApp Self-Service Platform</li>
+            <li>Infrastructure DAL</li>
+            <li>Operational Reporting Platform</li>
+            <li>QuestPDF Reporting Engine</li>
+            <li>Microsoft 365 Integrations</li>
+          </ul>
+        </div>
+
+        <div class="card reveal" style="transition-delay:.08s">
+          <h3>Education &amp; Certifications</h3>
+
+          <div class="cert-group">
+            <div class="g-label">Formal Education</div>
+            <ul>
+              <li>National Senior Certificate</li>
+            </ul>
+          </div>
+
+          <div class="cert-group">
+            <div class="g-label">Software Development</div>
+            <ul>
+              <li>Life Choices Full Stack Development</li>
+              <li>Microsoft Technology Associate — Software Development Fundamentals (MTA)</li>
+              <li>Foundational C# with Microsoft Certification — Freecode</li>
+            </ul>
+          </div>
+
+          <div class="cert-group">
+            <div class="g-label">AI &amp; Security</div>
+            <ul>
+              <li>Cybersecurity Foundations — LinkedIn Learning</li>
+              <li>Introduction to Artificial Intelligence — LinkedIn Learning</li>
+              <li>Generative AI for Business Leaders — LinkedIn Learning</li>
+            </ul>
+          </div>
+
+          <div class="cert-group">
+            <div class="g-label">Web &amp; Languages</div>
+            <ul>
+              <li>JavaScript, HTML &amp; SQL — Sololearn</li>
+              <li>React + Redux — Sololearn</li>
+              <li>WordPress for Beginners — Udemy</li>
+            </ul>
+          </div>
+
+          <div class="cert-group">
+            <div class="g-label">Early Exploration</div>
+            <ul>
+              <li>Microsoft Digital Literacy</li>
+              <li>Introduction to ICT</li>
+              <li>Introduction to 4IR</li>
+              <li>Unreal Engine Workshop</li>
+              <li>3D Printing Technologies</li>
+              <li>Drone Design &amp; Manufacturing</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>Languages: English · Afrikaans</div>
+        <div>Enterprise Software · Automation · Security · Integrations</div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var targets = document.querySelectorAll('.reveal');
+  if(reduceMotion || !('IntersectionObserver' in window)){
+    targets.forEach(function(el){ el.classList.add('in-view'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  targets.forEach(function(el){ observer.observe(el); });
+})();
+</script>
+
+</body>
+</html>
